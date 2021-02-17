@@ -1,0 +1,33 @@
+fatima:
+  dbInfo:
+    url: jdbc:h2:things
+    username: sa
+    password: sa
+    driver: org.h2.Driver
+    query:
+      planners: select SR_INSTANCE_CODE ,PLANNER_CODE ,DESCRIPTION ,EMPLOYEE_NUMBER ,DISABLE_DATE from XXX_PLANNERS_STG
+      createTbl: drop table if exists XXX_PLANNERS_STG;
+        create table XXX_PLANNERS_STG(
+            SR_INSTANCE_CODE VARCHAR2 (5)
+           ,PLANNER_CODE     VARCHAR2 (10)
+           ,DESCRIPTION	     VARCHAR2 (50)
+           ,EMPLOYEE_NUMBER  VARCHAR2 (30)
+           ,DISABLE_DATE     DATE
+        );
+        insert into XXX_PLANNERS_STG (SR_INSTANCE_CODE, PLANNER_CODE, DESCRIPTION)
+          values ('FGP','MS','Mohammad Shamil');
+        insert into XXX_PLANNERS_STG (SR_INSTANCE_CODE, PLANNER_CODE, DESCRIPTION)
+          values ('FGP','RIK','Rizwan Iqbal Khan');
+        insert into XXX_PLANNERS_STG (SR_INSTANCE_CODE, PLANNER_CODE, DESCRIPTION)
+          values ('FGP','MS1','Mohammad Shamil1');
+        insert into XXX_PLANNERS_STG (SR_INSTANCE_CODE, PLANNER_CODE, DESCRIPTION)
+          values ('FGP','MS2','Mohammad Shamil2');
+  fusionInfo:
+    oicUrl: https://fgtestoic-lrluulp1s3lw-ld.integration.ocp.oraclecloud.com
+    oicUsername: navtej.singh
+    oicPassword: Li2g2bwir@dg21
+    fusionUrl: https://ccol-test.fa.em3.oraclecloud.com
+    fusionUsername: oic.int
+    fusionPassword: FGoic@1234
+    jobs:
+      planners: /ic/api/integration/v1/flows/rest/DM_PLANNER_IMPORT_TRG/1.0/trigger/import/{jobId}

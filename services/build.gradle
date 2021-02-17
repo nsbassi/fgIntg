@@ -1,0 +1,47 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'groovy'
+}
+
+group = 'insight.sun.ams'
+version = '1.0.0.0'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+configurations{
+    providedRuntime
+    compile.exclude module: 'spring-boot-starter-tomcat'
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.codehaus.groovy:groovy:3.0.2'
+    implementation 'org.codehaus.groovy:groovy-sql:3.0.2'
+    implementation 'org.codehaus.groovy:groovy-xml:3.0.2'
+    implementation 'org.codehaus.groovy:groovy-json:3.0.2'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    implementation 'com.konghq:unirest-java:3.11.04'
+    implementation 'com.zaxxer:HikariCP:3.3.1'
+    implementation 'com.h2database:h2:1.3.176'
+
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:2.1.1'
+
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+
+    implementation 'org.codehaus.gpars:gpars:1.2.1'
+
+    runtimeOnly project(':frontend')
+}

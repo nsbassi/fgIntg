@@ -1,0 +1,51 @@
+plugins {
+    id 'base'
+    id "com.github.node-gradle.node" version "2.2.4"
+}
+
+repositories {
+    mavenCentral()
+}
+
+node {
+    download=false
+}
+
+npm_run_build {
+    inputs.files fileTree('public')
+    inputs.files fileTree('src')
+
+    inputs.file 'package.json'
+    inputs.file 'package-lock.json'
+
+    outputs.dir 'build'
+}
+
+task packageFrontend(type: Zip) {
+    dependsOn npm_run_build
+    baseName 'bulkedit-frontend'
+    extension 'jar'
+    destinationDir file("${projectDir}/build_packageFrontend")
+    from('build') {
+        into 'static'
+    }
+}
+
+configurations {
+    npmResources
+}
+
+configurations.default.extendsFrom(configurations.npmResources)
+
+artifacts {
+    npmResources(packageFrontend.archiveFile) {
+        builtBy packageFrontend
+        type 'jar'
+    }
+}
+
+assemble.dependsOn packageFrontend
+
+clean {
+    delete packageFrontend.archiveFile
+}

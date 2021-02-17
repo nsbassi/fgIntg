@@ -1,0 +1,4 @@
+rootProject.name = 'fgIntg'
+include 'frontend'
+include 'services'
+
