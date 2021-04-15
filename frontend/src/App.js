@@ -1,17 +1,22 @@
-import "./App.css";
+import "./main.css";
 import React, { Component } from "react";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
 import queryString from "query-string";
-import fileDownload from "js-file-download";
-import { joblist } from "./components/jobs";
 import Job from "./components/Job";
+import TblHdr from "./components/TblHdr";
+import NavBar from "./components/NavBar";
+import MsgBox from "./components/MsgBox";
+import HdrRow from "./components/HdrRow";
+import { toast } from "react-toastify";
 
 class App extends Component {
   state = {
-    jobs: joblist,
+    jobs: [],
+    instances: ["FGP", "OSP"],
+    instance: "FGP",
   };
+
   intervalId = {};
 
   constructor(props) {
@@ -20,6 +25,31 @@ class App extends Component {
     const token = value.token;
     Axios.defaults.headers.common["X-Authorization"] = token;
     Axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
+  }
+
+  async componentDidMount() {
+    this.loadJobs(this.state.instance);
+  }
+
+  async loadJobs(instance) {
+    try {
+      const response = await Axios.get("jobs", {
+        params: {
+          instance,
+        },
+      });
+      if (response.status === 200) {
+        const jobs = response.data;
+        this.setState({ jobs });
+      }
+    } catch (e) {
+      this.notify([
+        {
+          idx: 1,
+          text: `Failed to load job definitions. ${e.message}`,
+        },
+      ]);
+    }
   }
 
   notify = (errors) =>
@@ -31,8 +61,7 @@ class App extends Component {
             className="list-group-item"
             style={{
               backgroundColor: "#e74c3c",
-            }}
-          >
+            }}>
             {e.text}
           </li>
         ))}
@@ -48,6 +77,15 @@ class App extends Component {
     //   responseType: "blob",
     // });
     // fileDownload(data, `${job.number}.xlsx`);
+  };
+
+  handleInputChange = (e) => {
+    const jobType = e.target.getAttribute("data-jobname");
+    const val = e.target.value;
+    const { jobs } = this.state;
+    let job = jobs.find((j) => j.type === jobType);
+    job.option = val;
+    this.setState({ jobs });
   };
 
   reloadStatus = async (job) => {
@@ -95,13 +133,10 @@ class App extends Component {
     }
   };
 
-  handleInputChange = (e) => {
-    const jobType = e.target.getAttribute("data-jobname");
-    const val = e.target.value;
-    const { jobs } = this.state;
-    let job = jobs.find((j) => j.type === jobType);
-    job.option = val;
-    this.setState({ jobs });
+  insChg = (e) => {
+    const instance = e.target.getAttribute("data-instance");
+    this.setState({ instance });
+    this.loadJobs(instance);
   };
 
   startJob = async (e) => {
@@ -109,8 +144,8 @@ class App extends Component {
     const { jobs } = this.state;
     let job = jobs.find((j) => j.type === jobType);
     Object.assign(job, {
-      id: null,
       parentId: null,
+      essJobId: null,
       status: null,
       link: null,
       running: true,
@@ -119,7 +154,8 @@ class App extends Component {
     this.setState({ jobs });
 
     try {
-      const { data } = await Axios.post("/initiate", job);
+      job.instance = this.state.instance;
+      const { data } = await Axios.post("initiate", job);
       Object.assign(job, data);
       this.setState({ jobs });
       this.intervalId[job.type] = setTimeout(
@@ -135,9 +171,7 @@ class App extends Component {
       ]);
 
       Object.assign(job, {
-        id: null,
-        parentId: null,
-        status: "FAILED",
+        status: "failed",
         link: null,
         running: false,
         complete: false,
@@ -147,81 +181,34 @@ class App extends Component {
   };
 
   render() {
-    const { instance, jobs } = this.state;
+    const { instance, instances, jobs } = this.state;
     return (
-      <div className="container-fluid">
-        <div className="row" style={{ margin: "0 20px" }}>
-          <div className="col-sm-12">
-            <div className="row pmd-textfield" style={{ marginTop: "10px" }}>
-              <label
-                htmlFor="qtyToAdd"
-                className="offset-sm-8 col-sm-1 col-form-label"
-              >
-                <strong>Instance</strong>
-              </label>
-              <div className="col-sm-1">
-                <select
-                  id="propeller-select"
-                  className="form-control"
-                  value={instance}
-                  name="action"
-                  onChange={this.handleInputChange}
-                >
-                  <option value="FGP">FGP</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row" style={{ margin: "0 20px" }}>
-          <div className="col-sm-12">
-            <h3 style={{ margin: "0" }}>Master Data</h3>
-          </div>
-        </div>
-        <hr style={{ margin: "0 0 15px 0" }} />
-        <div className="row" style={{ margin: "0 20px" }}>
-          {jobs
-            .filter((j) => j.group === "master")
-            .map((job) => (
-              <Job
-                key={job.type}
-                job={job}
-                handleInputChange={this.handleInputChange}
-                startJob={this.startJob}
-                saveLog={this.saveLog}
-              />
-            ))}
-        </div>
-        <div className="row" style={{ marginTop: "20px" }}>
-          <div className="col-sm-12">
-            <h3 style={{ margin: "0" }}>Transactional Data</h3>
-          </div>
-        </div>
-        <hr style={{ margin: "0 0 15px 0" }} />
-        <div className="row" style={{ margin: "0 20px" }}>
-          {jobs
-            .filter((j) => j.group === "transactional")
-            .map((job) => (
-              <Job
-                key={job.type}
-                job={job}
-                handleInputChange={this.handleInputChange}
-                startJob={this.startJob}
-                saveLog={this.saveLog}
-              />
-            ))}
-        </div>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
+      <div style={{ maxWidth: "1100px", margin: "20px auto" }}>
+        <NavBar
+          instances={instances}
+          instance={instance}
+          insChg={this.insChg}
         />
+        <TblHdr jobs={jobs} handleOpenModal={this.handleOpenModal} />
+        <div className="table-responsive" style={{ maxHeight: "500px" }}>
+          <table className="table table-hover">
+            <HdrRow />
+            <tbody>
+              {jobs.map((job) => {
+                return (
+                  <Job
+                    key={job.type}
+                    job={job}
+                    handleInputChange={this.handleInputChange}
+                    startJob={this.startJob}
+                    saveLog={this.saveLog}
+                  />
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <MsgBox notify={this.notify} />
       </div>
     );
   }

@@ -16,14 +16,14 @@ class AppConfig {
 
     FusionInfo fusionInfo
 
-    String dateFormat = 'dd-MM-yyyy', stagingDir = 'staging'
+    String dateFormat = 'yyyy/MM/dd', stagingDir = 'staging', fileNameSuffixFormat='yyyy-dd-MM-hh-mm-ss'
     Duration purgeFrequency = Duration.ZERO.plusDays(1)
-    int retention = 7
+    int retention = 365
 
     @NestedConfigurationProperty
     Proxy proxy
 
-    boolean disableSSLHostVerification = false
+    boolean disableSSLHostVerification = false, useOIC = true
 
     Duration conTimeout = Duration.ZERO.plusSeconds(20), socTimeout = Duration.ZERO.plusSeconds(60)
 

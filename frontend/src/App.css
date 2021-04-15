@@ -89,3 +89,46 @@
 h3.pmd-stepper-title {
   margin: 0;
 }
+
+.btn-xs,
+.btn-group-sm > .btn {
+  padding: 0.15rem 0.3rem;
+  font-size: 0.675rem;
+  line-height: 1;
+  border-radius: 0.1rem;
+}
+
+.btn-xs + .dropdown-toggle-split,
+.btn-group-sm > .btn + .dropdown-toggle-split {
+  padding-right: 0.275rem;
+  padding-left: 0.275rem;
+}
+
+.btn-grey {
+  color: #9a9c9e;
+  background-color: #a5abb1;
+  background-color: #d3d5d6;
+}
+
+.btn-grey.pmd-btn-flat {
+  color: #c1c2c4;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-FAILED {
+  color: #fff;
+  background-color: #ff5722;
+  border-color: #ff5722;
+}
+
+.btn-FAILED.pmd-btn-flat,
+.btn-failed.pmd-btn-flat {
+  color: #ff5722;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.table.jobtbl {
+  max-height: 500px;
+}

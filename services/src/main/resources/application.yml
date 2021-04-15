@@ -1,33 +1,34 @@
+server:
+  port: 9001
+logging:
+  level:
+    root: ERROR
 fatima:
+  useOIC: false
+  dateFormat: yyyy/MM/dd
+  fileNameSuffixFormat: 'yyMMdd-hhmmss'
   dbInfo:
-    url: jdbc:h2:things
-    username: sa
-    password: sa
-    driver: org.h2.Driver
+    url: jdbc:oracle:thin:@122.176.75.213:12521:ERPDEV
+    username: dmsop
+    password: SopDm_211
+    driver: oracle.jdbc.OracleDriver
     query:
-      planners: select SR_INSTANCE_CODE ,PLANNER_CODE ,DESCRIPTION ,EMPLOYEE_NUMBER ,DISABLE_DATE from XXX_PLANNERS_STG
-      createTbl: drop table if exists XXX_PLANNERS_STG;
-        create table XXX_PLANNERS_STG(
-            SR_INSTANCE_CODE VARCHAR2 (5)
-           ,PLANNER_CODE     VARCHAR2 (10)
-           ,DESCRIPTION	     VARCHAR2 (50)
-           ,EMPLOYEE_NUMBER  VARCHAR2 (30)
-           ,DISABLE_DATE     DATE
-        );
-        insert into XXX_PLANNERS_STG (SR_INSTANCE_CODE, PLANNER_CODE, DESCRIPTION)
-          values ('FGP','MS','Mohammad Shamil');
-        insert into XXX_PLANNERS_STG (SR_INSTANCE_CODE, PLANNER_CODE, DESCRIPTION)
-          values ('FGP','RIK','Rizwan Iqbal Khan');
-        insert into XXX_PLANNERS_STG (SR_INSTANCE_CODE, PLANNER_CODE, DESCRIPTION)
-          values ('FGP','MS1','Mohammad Shamil1');
-        insert into XXX_PLANNERS_STG (SR_INSTANCE_CODE, PLANNER_CODE, DESCRIPTION)
-          values ('FGP','MS2','Mohammad Shamil2');
+      jobDef: select * from CUST_DM_JOB_DEF_STG_V where (instance_id is null or instance_id=:instance)
+      jobDetails: select * from CUST_DM_JOB_INT_STG_T where job_id=:id
+      jobLog: insert into CUST_DM_JOB_LOG_STG_T (job_id, started_at, status, ess_id, executed_by, instance_id) values (:id, sysdate, :status, :essJobId, :runBy, :instance)
+      jobLogUpd: update CUST_DM_JOB_LOG_STG_T set ess_id=:essJobId, status=:status where id = :logId
+
   fusionInfo:
     oicUrl: https://fgtestoic-lrluulp1s3lw-ld.integration.ocp.oraclecloud.com
+    intEndPoint: /ic/api/integration/v1/flows/rest/DM_DATA_IMPORT/1.0/dm/import/{jobId}
     oicUsername: navtej.singh
     oicPassword: Li2g2bwir@dg21
     fusionUrl: https://ccol-test.fa.em3.oraclecloud.com
+    essWsEndPoint: /ess/esswebservice
+    intFusionIntSvc: /fscmRestApi/resources/11.13.18.05/erpintegrations
+    essFailedStatusList:
+      - FAILED
+      - WARNING
+      - ERROR
     fusionUsername: oic.int
     fusionPassword: FGoic@1234
-    jobs:
-      planners: /ic/api/integration/v1/flows/rest/DM_PLANNER_IMPORT_TRG/1.0/trigger/import/{jobId}

@@ -30,22 +30,22 @@ class UnirestClient {
                 .concurrency(300, 60)
     }
 
-    public <T> ApiResponse<T> sendRequest(String path, String token, Map<String, Map<String, ?>> params, Class<T> clazz) {
+    public <T> ApiResponse<T> sendRequest(String method, def body, String path, String token, Map<String, Map<String, ?>> params, Class<T> clazz) {
         ApiResponse<T> respOut = null
         def headers = [Authorization: token]
         if (params?.headers) headers.putAll(params.headers)
 
-        def req = Unirest.get(path).headers(headers)
+        def req = Unirest.request(method, path).headers(headers)
         if (params?.routeParam) req.routeParam(params.routeParam)
         if (params?.queryString) req.queryString(params.queryString)
-
+        if (body) req.body(body)
         req.asObject(clazz)
                 .ifSuccess({ response ->
                     logger.debugEnabled && logger.debug('Response-> {}', response.body)
                     respOut = new ApiResponse<T>(response.status, response.statusText, response.body)
                 })
                 .ifFailure({ response ->
-                    logger.error('Request-> {}', [method: 'POST', url: path, headers: headers])
+                    logger.error('Request-> {}', [method: method, url: path, headers: headers])
                     logger.error('Response-> headers:{}, body:{}', response.headers, response.body)
                     T result = response.body
                     response.parsingError.ifPresent({ e ->
@@ -57,7 +57,28 @@ class UnirestClient {
         respOut
     }
 
-    def downloadFiles(HttpMethod method, String url, String token, Map<String, Map<String, ?>> params) {
+    static ApiResponse<String> sendRequest(String method, def body, String path, String token, Map<String, Map<String, ?>> params) {
+        def headers = [Authorization: token]
+        if (params?.headers) headers.putAll(params.headers)
+
+        def req = Unirest.request(method, path).headers(headers)
+        if (params?.routeParam) req.routeParam(params.routeParam)
+        if (params?.queryString) req.queryString(params.queryString)
+        if (body) req.body(body)
+
+        ApiResponse<String> respOut = null
+        req.asString().ifSuccess({ response ->
+            logger.debugEnabled && logger.debug('Response-> {}', response.body)
+            respOut = new ApiResponse<String>(response.status, response.statusText, response.body)
+        }).ifFailure({ response ->
+            logger.error('Request-> {}', [method: method, url: path, headers: headers])
+            logger.error('Response-> headers:{}, body:{}', response.headers, response.body)
+            respOut = new ApiResponse<String>(response.status, response.statusText, response.body)
+        })
+        respOut
+    }
+
+    static def downloadFiles(HttpMethod method, String url, String token, Map<String, Map<String, ?>> params) {
 
         def headers = [Authorization: token]
         if (params?.headers) headers.putAll(params.headers)

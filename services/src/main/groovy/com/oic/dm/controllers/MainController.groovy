@@ -20,14 +20,24 @@ class MainController {
     AppConfig config
 
     @Autowired
-    DBService service
+    DBService dbService
 
     @Autowired
     JobService jobService
 
-    @GetMapping('/fatima')
-    def hello() {
+    @GetMapping('/status')
+    def status() {
         return [msg: 'OK']
+    }
+
+    @GetMapping(value = '/jobs')
+    List<Job> listJobs(@RequestParam String instance) {
+        dbService.loadJobInfo(instance)
+    }
+
+    @GetMapping(value = '/job/{id}')
+    Job getJobInfo(@RequestParam String instance, @PathVariable int id) {
+        dbService.loadJobInfo(instance, id)
     }
 
     @PostMapping(value = '/initiate')
@@ -37,12 +47,12 @@ class MainController {
 
     @PostMapping(value = '/status')
     Job checkJobStatus(@RequestBody Job job) {
-        jobService.getJobStatus(job)
+        jobService.findJob(job)
     }
 
-    @RequestMapping(method = [RequestMethod.GET], value = '/fatima/planners')
-    ResponseEntity<Resource> getData() {
-        File zipFile = service.buildPlannerFile()
+    @RequestMapping(method = [RequestMethod.GET], value = '/fatima/{jobType}')
+    ResponseEntity<Resource> getData(@PathVariable jobType) {
+        File zipFile = dbService.buildFile(jobType)
         Resource resource = new InputStreamResource(new FileInputStream(zipFile))
         ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType('application/zip'))
