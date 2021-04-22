@@ -23,3 +23,8 @@ yarn-error.log*
 
 /.idea
 /.gradle
+
+/libs
+
+/Data
+/staging
