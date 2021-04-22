@@ -1,14 +1,42 @@
-.media .media-body {
-  margin-left: 10px;
-}
-.media .media-body h3 {
-  margin-left: 0;
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    Arial, sans-serif;
+  font-size: 0.875em;
 }
 
-.material-icons.pmd-icon-md,
-.material-icons-round.pmd-icon-md {
-  display: inline-flex;
-  font-size: 36px;
+nav.navbar.navbar-expand-lg.navbar-light.bg-blue {
+  background-color: #027bc7;
+  height: 55px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+nav.navbar.navbar-expand-lg.navbar-light.bg-grey {
+  background-color: #f3f3f5;
+  height: 55px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+nav.navbar .navbar-brand {
+  vertical-align: middle;
+  font-weight: 100;
+  font-size: 26px;
+  height: 45px;
+  line-height: 45px;
+  box-sizing: border-box;
+  color: #fff;
+  letter-spacing: -1.5px;
+}
+
+.navbar-brand * {
+  -webkit-font-smoothing: initial !important;
+  -moz-osx-font-smoothing: initial !important;
+}
+
+.btn-grey {
+  color: #027bc7;
+  background-color: #f1f1f1;
 }
 
 @font-face {
@@ -80,55 +108,50 @@
   -webkit-font-smoothing: antialiased;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-h3.pmd-stepper-title {
-  margin: 0;
-}
-
-.btn-xs,
-.btn-group-sm > .btn {
-  padding: 0.15rem 0.3rem;
-  font-size: 0.675rem;
-  line-height: 1;
-  border-radius: 0.1rem;
-}
-
-.btn-xs + .dropdown-toggle-split,
-.btn-group-sm > .btn + .dropdown-toggle-split {
-  padding-right: 0.275rem;
-  padding-left: 0.275rem;
-}
-
 .btn-grey {
-  color: #9a9c9e;
-  background-color: #a5abb1;
-  background-color: #d3d5d6;
-}
-
-.btn-grey.pmd-btn-flat {
-  color: #c1c2c4;
+  color: #787a7c;
   background-color: transparent;
-  border-color: transparent;
+  padding: 0 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  border-radius: 0.125rem;
 }
 
-.btn-FAILED {
-  color: #fff;
-  background-color: #ff5722;
-  border-color: #ff5722;
+.material-icons.pmd-md {
+  font-size: 30px;
 }
 
-.btn-FAILED.pmd-btn-flat,
-.btn-failed.pmd-btn-flat {
-  color: #ff5722;
+nav.navbar .navbar-brand.dark {
+  color: "#787a7c";
+}
+
+.btn.pmd-btn-fab.pmd-btn-outline.btn-primary {
+  font-weight: 200;
+  color: #4285f4;
+  border-color: #989292;
   background-color: transparent;
-  border-color: transparent;
 }
 
-.table.jobtbl {
-  max-height: 500px;
+.btn.pmd-btn-fab.pmd-btn-outline.btn-grey {
+  font-weight: 200;
+  color: "#989292;";
+  border-color: #989292;
+  /* background-color: transparent; */
+}
+
+.status-success {
+  color: rgb(111, 180, 111) !important;
+}
+
+.status-failed {
+  color: rgb(201, 53, 48) !important;
+}
+
+.status-unknown {
+  color: rgb(149, 153, 149) !important;
+}
+
+div.app-wrapper {
+  max-width: "1000px";
+  margin: "auto";
 }
