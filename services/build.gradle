@@ -46,6 +46,7 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: '*.jar')
     runtimeOnly project(':frontend')
+    implementation project(':IntegrationService')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

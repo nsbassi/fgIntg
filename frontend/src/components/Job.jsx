@@ -28,8 +28,11 @@ const Job = (props) => {
           className={
             "mr-4 btn btn-xs pmd-btn-fab pmd-ripple-effect pmd-btn-outline btn-grey"
           }
+          onClick={saveLog}
           data-tip="Download Logs">
-          <i className="material-icons pmd-icon-xs">file_download</i>
+          <i className="material-icons pmd-icon-xs" data-jobname={job.type}>
+            file_download
+          </i>
         </button>
       </td>
       <td>

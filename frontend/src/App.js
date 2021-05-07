@@ -9,6 +9,7 @@ import NavBar from "./components/NavBar";
 import MsgBox from "./components/MsgBox";
 import HdrRow from "./components/HdrRow";
 import { toast } from "react-toastify";
+import fileDownload from "js-file-download";
 
 class App extends Component {
   state = {
@@ -68,15 +69,19 @@ class App extends Component {
       </ul>
     );
 
-  saveLog = async () => {
-    // const { job } = this.state;
-    // const { data } = await Axios({
-    //   url: `/bulkedit/jobs/download/${job.id}`,
-    //   method: "get",
-    //   headers: { "content-type": "application/octet-stream" },
-    //   responseType: "blob",
-    // });
-    // fileDownload(data, `${job.number}.xlsx`);
+  saveLog = async (e) => {
+    const jobType = e.target.getAttribute("data-jobname");
+    const { jobs } = this.state;
+    let job = jobs.find((j) => j.type === jobType);
+    if (job?.essJobId) {
+      const { data } = await Axios({
+        url: `/job/${job.essJobId}/logs`,
+        method: "get",
+        headers: { "content-type": "application/octet-stream" },
+        responseType: "blob",
+      });
+      fileDownload(data, `${job.essJobId}.zip`);
+    }
   };
 
   handleInputChange = (e) => {

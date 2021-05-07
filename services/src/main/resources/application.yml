@@ -10,7 +10,7 @@ fatima:
   dateFormat: yyyy/MM/dd
   fileNameSuffixFormat: 'yyMMdd-hhmmss'
   dbInfo:
-    url: jdbc:oracle:thin:@122.176.75.213:12521:ERPDEV
+    url: jdbc:oracle:thin:@192.168.1.24:1521:ERPDEV
     username: dmsop
     password: SopDm_211
     driver: oracle.jdbc.OracleDriver
@@ -32,5 +32,6 @@ fatima:
       - FAILED
       - WARNING
       - ERROR
+      - CANCELLED
     fusionUsername: oic.int
     fusionPassword: Navtej@1234

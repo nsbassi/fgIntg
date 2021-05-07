@@ -1,0 +1,118 @@
+{
+  "properties":{
+    "CallbackURL":{
+      "type":"string",
+      "description":"The callback URL of the service implemented by a customer to receive the job status of an Enterprise Scheduling Service job upon its completion.",
+      "title":"Callback URL"
+    },
+    "Comments":{
+      "type":"string",
+      "description":"The action that appends the specified comments to a file.",
+      "title":"Comments"
+    },
+    "ContentType":{
+      "type":"string",
+      "description":"The type of content within a data file to be processed by the ERP Integration Service.",
+      "title":"Content Type"
+    },
+    "DocumentAccount":{
+      "type":"string",
+      "description":"The account parameter to search for files corresponding to a specified security account.",
+      "title":"Document Account"
+    },
+    "DocumentContent":{
+      "type":"string",
+      "description":"The content of the file in Base64 encoded format.",
+      "title":"Document Content"
+    },
+    "DocumentId":{
+      "type":"string",
+      "description":"The unique identifier of a file associated with the row.",
+      "title":"Document Identifier"
+    },
+    "ESSParameters":{
+      "type":"string",
+      "description":"The list of parameters used to run the Enterprise Scheduling Service job. The list determines the order of the parameters. The corresponding entry in the list should be blank when a given parameter is not passed.",
+      "title":"Parameters"
+    },
+    "FileName":{
+      "type":"string",
+      "description":"The name of the data file to be processed by the ERP Integration Service.",
+      "title":"File Name"
+    },
+    "FileType":{
+      "type":"string",
+      "description":"The file type that determines the execution details to be downloaded. Specify LOG as the file type to download the log and output file. Specify OUT as the file type to download only the output file. If no file type is specified, both the log files and output files are downloaded.",
+      "title":"File Type"
+    },
+    "JobDefName":{
+      "type":"string",
+      "description":"The name of the Enterprise Scheduling Service job definition that must be submitted.",
+      "title":"Job Definition Name"
+    },
+    "JobName":{
+      "type":"string",
+      "description":"The job name and job package name separated by a comma.",
+      "title":"Job Name"
+    },
+    "JobOptions":{
+      "type":"string",
+      "description":"A web service operation input parameter. It specifies the inbound bulk data processing variation and the output file type that is generated when the data is processed.",
+      "title":"Job Options"
+    },
+    "JobPackageName":{
+      "type":"string",
+      "description":"The name of the Enterprise Scheduling Service job package that must be submitted.",
+      "title":"Job Package Name"
+    },
+    "LoadRequestId":{
+      "type":"string",
+      "description":"The unique identifier of the load process that populates data in a product interface table.",
+      "title":"Load Request Identifier"
+    },
+    "NotificationCode":{
+      "type":"string",
+      "description":"The two-digit code that determines the notification type and when the notification should be sent.",
+      "title":"Notification Code"
+    },
+    "OperationName":{
+      "type":"string",
+      "description":"The name of the ERP Integration Service operations used to manage inbound and outbound data flows.",
+      "title":"Operation Name"
+    },
+    "ParameterList":{
+      "type":"string",
+      "description":"The list of parameters used to run the Enterprise Scheduling Service job. The list determines the order of the parameters. The corresponding entry in the list must be blank when a given parameter is not passed.",
+      "title":"Parameter List"
+    },
+    "ProcessName":{
+      "type":"string",
+      "description":"The name of a particular business application's data import process.",
+      "title":"Process Name"
+    },
+    "ReqstId":{
+      "type":"string",
+      "description":"The unique identifier of the submitted Enterprise Scheduling Service job request.",
+      "title":"Request Identifier"
+    },
+    "RequestStatus":{
+      "type":"string",
+      "description":"The current status of the Enterprise Scheduling Service job.",
+      "title":"Request Status"
+    },
+    "StatusCode":{
+      "type":"string",
+      "description":"The code representing the current status of the Enterprise Scheduling Service job.",
+      "title":"Status Code"
+    },
+    "links":{
+      "items":{
+        "$ref":"link.json"
+      },
+      "type":"array",
+      "description":"Link Relations",
+      "title":"Items"
+    }
+  },
+  "type":"object"
+}

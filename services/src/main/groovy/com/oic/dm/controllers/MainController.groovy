@@ -36,14 +36,14 @@ class MainController {
     }
 
     @GetMapping('/encrypt')
-    def encrypt(@RequestParam String key,  @RequestParam String input){
+    def encrypt(@RequestParam String key, @RequestParam String input) {
         BasicTextEncryptor enc = new BasicTextEncryptor()
         enc.setPasswordCharArray(key.toCharArray())
         enc.encrypt(input)
     }
 
     @GetMapping('/decrypt')
-    def decrypt(@RequestParam String key,  @RequestParam String input) {
+    def decrypt(@RequestParam String key, @RequestParam String input) {
         BasicTextEncryptor enc = new BasicTextEncryptor()
         enc.setPasswordCharArray(key.toCharArray())
         enc.decrypt(input)
@@ -70,11 +70,26 @@ class MainController {
         }
     }
 
+    @GetMapping(value = '/job/{id}/logs')
+    ResponseEntity<Resource> getJobLogs(HttpServletRequest request, @PathVariable int id) {
+        String token = request.getHeader('X-Authorization')
+        if (authService.isValid(token)) {
+            File zipFile = jobService.getLogs(id, token)
+            Resource resource = new InputStreamResource(new FileInputStream(zipFile))
+            ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType('application/zip'))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"$zipFile.name\"")
+                    .body(resource)
+        } else {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null)
+        }
+    }
+
     @PostMapping(value = '/initiate')
     ResponseEntity<Job> initiateJob(HttpServletRequest request, @RequestBody Job job) {
         String token = request.getHeader('X-Authorization')
         if (authService.isValid(token)) {
-            ResponseEntity.ok().body(jobService.initiate(job))
+            ResponseEntity.ok().body(jobService.initiate(job, token))
         } else {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null)
         }
@@ -84,22 +99,7 @@ class MainController {
     ResponseEntity<Job> checkJobStatus(HttpServletRequest request, @RequestBody Job job) {
         String token = request.getHeader('X-Authorization')
         if (authService.isValid(token)) {
-            ResponseEntity.ok().body(jobService.findJob(job))
-        } else {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null)
-        }
-    }
-
-    @RequestMapping(method = [RequestMethod.GET], value = '/fatima/{jobType}')
-    ResponseEntity<Resource> getData(HttpServletRequest request, @PathVariable jobType) {
-        String token = request.getHeader('X-Authorization')
-        if (authService.isValid(token)) {
-            File zipFile = dbService.buildFile(jobType)
-            Resource resource = new InputStreamResource(new FileInputStream(zipFile))
-            ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType('application/zip'))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"$zipFile.name\"")
-                    .body(resource)
+            ResponseEntity.ok().body(jobService.findJob(job, token))
         } else {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null)
         }

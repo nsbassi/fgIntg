@@ -71,7 +71,7 @@ class UnirestClient {
             logger.debugEnabled && logger.debug('Response-> {}', response.body)
             respOut = new ApiResponse<String>(response.status, response.statusText, response.body)
         }).ifFailure({ response ->
-            logger.error('Request-> {}', [method: method, url: path, headers: headers])
+            logger.error('Request-> {}', [method: method, url: path, headers: headers, body: req.body])
             logger.error('Response-> headers:{}, body:{}', response.headers, response.body)
             respOut = new ApiResponse<String>(response.status, response.statusText, response.body)
         })
