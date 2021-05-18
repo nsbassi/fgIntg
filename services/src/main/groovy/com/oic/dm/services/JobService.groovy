@@ -47,11 +47,14 @@ class JobService {
             essJobId = null
             parentId = null
             status = 'unknown'
+            logId = null
             lastRunDate = new Date()
             runBy = config.fusionInfo.oicUsername
         }
         try {
             String jobNum = nextJobNumber
+            job.status = jobNum
+            dbService.saveJobLog(job)
             File file = dbService.buildFile(job, jobNum)
             if (file) {
                 if (config.useOIC) {
@@ -72,7 +75,7 @@ class JobService {
                         job.status = 'failed'
                     }
                 }
-                dbService.saveJobLog(job)
+                dbService.saveJobLog(job, true)
                 findJob(job, faTokenIn)
             } else {
                 job.status = 'failed'
@@ -106,7 +109,6 @@ class JobService {
         } else {
             getEssJobStatus(job, faTokenIn)
         }
-        dbService.saveJobLog(job)
         job
     }
 
@@ -116,10 +118,12 @@ class JobService {
             if (intJob.requestStatus == 'SUCCEEDED') {
                 status = 'success'
                 running = false
+                dbService.saveJobLog(job, true)
             }
             if (intJob.requestStatus in config.fusionInfo.essFailedStatusList) {
                 status = 'failed'
                 running = false
+                dbService.saveJobLog(job, true)
             }
             status = intJob.requestStatus
         }

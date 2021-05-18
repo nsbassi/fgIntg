@@ -8,9 +8,9 @@ logging:
 fatima:
   useOIC: false
   dateFormat: yyyy/MM/dd
-  fileNameSuffixFormat: 'yyMMdd-hhmmss'
+  fileNameSuffixFormat: 'yyMMddhhmmss'
   dbInfo:
-    url: jdbc:oracle:thin:@192.168.1.24:1521:ERPDEV
+    url: jdbc:oracle:thin:@localhost:1521:ERPDEV
     username: dmsop
     password: SopDm_211
     driver: oracle.jdbc.OracleDriver
@@ -18,6 +18,7 @@ fatima:
       jobDef: select * from CUST_DM_JOB_DEF_STG_V where (instance_id is null or instance_id=:instance)
       jobDetails: select * from CUST_DM_JOB_INT_STG_T where job_id=:id
       jobLog: insert into CUST_DM_JOB_LOG_STG_T (job_id, started_at, status, ess_id, executed_by, instance_id) values (:id, sysdate, :status, :essJobId, :runBy, :instance)
+      jobLogSel: select * from CUST_DM_JOB_LOG_STG_T where status = :status
       jobLogUpd: update CUST_DM_JOB_LOG_STG_T set ess_id=:essJobId, status=:status where id = :logId
 
   fusionInfo:

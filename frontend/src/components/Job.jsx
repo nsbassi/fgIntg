@@ -16,7 +16,7 @@ const Job = (props) => {
           }>
           {job.status === "success"
             ? "check_circle"
-            : job.status === "failed"
+            : job.status === "failed" || job.status === "ERROR" || job.status === "FAILED" || job.status === "WARNING" || job.status === "CANCELLED"
             ? "error"
             : "remove_circle"}
         </i>

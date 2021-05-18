@@ -53,8 +53,11 @@ class DBService {
         if (update) {
             sql.executeUpdate(appConfig.dbInfo.query.jobLogUpd, job)
         } else {
-            def res = sql.executeInsert(appConfig.dbInfo.query.jobLog, job)
-            println(res)
+            sql.executeInsert(appConfig.dbInfo.query.jobLog, job)
+            def resId = sql.firstRow(appConfig.dbInfo.query.jobLogSel, job)
+            job.logId = resId.id
+            job.status = 'unknown'
+            sql.executeUpdate(appConfig.dbInfo.query.jobLogUpd, job)
         }
         sql.close()
         job
